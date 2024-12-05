@@ -22,3 +22,6 @@ def text_node_to_html_node(text_node: TextNode):
             )
         case _:
             raise Exception("Unindentified text type")
+
+def text_to_textnodes(text):
+    pass
