@@ -60,8 +60,6 @@ class TestTextNode(unittest.TestCase):
         with self.assertRaises(Exception):
             text_node_to_html_node(node)
 
-
-
     def test_text_to_textnodes(self):
         nodes = text_to_textnodes(
             "This is **text** with an _italic_ word and a `code block` and an ![image](https://i.imgur.com/zjjcJKZ.png) and a [link](https://boot.dev)"
@@ -81,6 +79,7 @@ class TestTextNode(unittest.TestCase):
             ],
             nodes,
         )
+
 
 if __name__ == "__main__":
     unittest.main()
