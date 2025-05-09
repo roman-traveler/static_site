@@ -1,4 +1,5 @@
 from htmlnode import LeafNode
+from splitting_utils import split_nodes_delimiter, split_nodes_link, split_nodes_image
 from textnode import TextNode, TextType
 
 
@@ -23,5 +24,15 @@ def text_node_to_html_node(text_node: TextNode):
         case _:
             raise Exception("Unindentified text type")
 
-def text_to_textnodes(text):
-    pass
+
+def text_to_textnodes(text: str):
+    """
+    Convert a string to a list of text nodes.
+    """
+    text = [TextNode(text, TextType.TEXT)]
+    text = split_nodes_delimiter(text, "**", TextType.BOLD)
+    
+    text = split_nodes_delimiter(text, "_", TextType.ITALIC)
+    
+    text = split_nodes_delimiter(text, "`", TextType.CODE)
+    return split_nodes_link(split_nodes_image(text))
