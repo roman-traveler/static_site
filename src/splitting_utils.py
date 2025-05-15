@@ -32,6 +32,11 @@ def extract_markdown_links(text):
     val = re.findall(r"\[(.*?)\]\((.*?)\)", text)
     return val
 
+def extract_title(markdown):
+    title = re.findall(r"# (.*)", markdown)
+    if len(title) == 0:
+        raise ValueError("invalid markdown, title not found")
+    return title[0].strip()
 
 def split_nodes_image(old_nodes):
     new_nodes = []

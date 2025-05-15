@@ -2,6 +2,7 @@ import unittest
 from splitting_utils import (
     extract_markdown_images,
     extract_markdown_links,
+    extract_title,
     split_nodes_delimiter,
     split_nodes_image,
     split_nodes_link,
@@ -272,6 +273,63 @@ class TestMarkdownExtraction(unittest.TestCase):
             ],
             new_nodes,
         )
+
+        class TestExtractTitle(unittest.TestCase):
+            def test_extract_title_basic(self):
+                """Test extraction of a basic markdown title."""
+                markdown = "# This is a title"
+                expected = "This is a title"
+                result = extract_title(markdown)
+                self.assertEqual(result, expected)
+
+            def test_extract_title_with_extra_text(self):
+                """Test extraction of a title with extra text below."""
+                markdown = "# Title\nSome other text"
+                expected = "Title"
+                result = extract_title(markdown)
+                self.assertEqual(result, expected)
+
+            def test_extract_title_with_leading_whitespace(self):
+                """Test extraction of a title with leading whitespace."""
+                markdown = "   # Title with leading spaces"
+                expected = "Title with leading spaces"
+                result = extract_title(markdown)
+                self.assertEqual(result, expected)
+
+            def test_extract_title_no_title(self):
+                """Test extraction when no title is present."""
+                markdown = "This is text without a title"
+                with self.assertRaises(ValueError) as context:
+                    extract_title(markdown)
+                self.assertEqual(str(context.exception), "invalid markdown, title not found")
+
+            def test_extract_title_multiple_titles(self):
+                """Test extraction when multiple titles are present."""
+                markdown = "# First Title\n# Second Title"
+                expected = "First Title"
+                result = extract_title(markdown)
+                self.assertEqual(result, expected)
+
+            def test_extract_title_empty_string(self):
+                """Test extraction when the markdown is an empty string."""
+                markdown = ""
+                with self.assertRaises(ValueError) as context:
+                    extract_title(markdown)
+                self.assertEqual(str(context.exception), "invalid markdown, title not found")
+
+            def test_extract_title_special_characters(self):
+                """Test extraction of a title with special characters."""
+                markdown = "# Title with !@#$%^&*()"
+                expected = "Title with !@#$%^&*()"
+                result = extract_title(markdown)
+                self.assertEqual(result, expected)
+
+            def test_extract_title_with_trailing_whitespace(self):
+                """Test extraction of a title with trailing whitespace."""
+                markdown = "# Title with trailing spaces   "
+                expected = "Title with trailing spaces"
+                result = extract_title(markdown)
+                self.assertEqual(result, expected)
 
 
 if __name__ == "__main__":
